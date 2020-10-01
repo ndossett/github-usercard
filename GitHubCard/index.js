@@ -1,9 +1,14 @@
+import axios from 'axios';
 /*
   STEP 1: using axios, send a GET request to the following URL
     (replacing the placeholder with your Github name):
     https://api.github.com/users/<your name>
 */
-
+// axios.get('https://api.github.com/users/ndossett')
+// .then(res => {
+//   const cards = document.querySelector('.cards')
+//   cards.appendChild(cardMaker(res.data))
+// })
 /*
   STEP 2: Inspect and study the data coming back, this is YOUR
     github info! You will need to understand the structure of this
@@ -17,6 +22,7 @@
     and append the returned markup to the DOM as a child of .cards
 */
 
+
 /*
   STEP 5: Now that you have your own card getting added to the DOM, either
     follow this link in your browser https://api.github.com/users/<Your github name>/followers,
@@ -28,7 +34,21 @@
     user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+const followersArray = ['tetondan',
+  'dustinmyers',
+  'justsml',
+  'luishrd',
+  'bigknell',
+  'ndossett'];
+
+
+ followersArray.forEach((element) => {
+  axios.get(`https://api.github.com/users/${element}`)
+  .then(res => {
+    const cards = document.querySelector('.cards')
+    cards.appendChild(cardMaker(res.data))
+  })
+ })
 
 /*
   STEP 3: Create a function that accepts a single object as its only argument.
@@ -58,3 +78,45 @@ const followersArray = [];
     luishrd
     bigknell
 */
+function cardMaker(object) {
+  const cardDiv = document.createElement('div')
+  const img = document.createElement('img')
+  const cardInfoDiv = document.createElement('div')
+  const h3 = document.createElement('h3')
+  const usernameP = document.createElement('p')
+  const locationP = document.createElement('p')
+  const profileP = document.createElement('p')
+  const address = document.createElement('a')
+  const followersP = document.createElement('p')
+  const followingP = document.createElement('p')
+  const bioP = document.createElement('p')
+  img.setAttribute('src', object.avatar_url)
+
+  cardDiv.appendChild(img)
+  cardDiv.appendChild(cardInfoDiv)
+  cardInfoDiv.appendChild(h3)
+  cardInfoDiv.appendChild(usernameP)
+  cardInfoDiv.appendChild(locationP)
+  cardInfoDiv.appendChild(profileP)
+  profileP.appendChild(address)
+  cardInfoDiv.appendChild(followersP)
+  cardInfoDiv.appendChild(followingP)
+  cardInfoDiv.appendChild(bioP)
+
+  cardDiv.classList.add('card')
+  cardInfoDiv.classList.add('card-info')
+  h3.classList.add('name')
+  usernameP.classList.add('username')
+
+  img.setAttribute('src', object.avatar_url)
+  h3.textContent = `${object.name}`
+  usernameP.textContent = `Username: ${object.login}`
+  locationP.textContent = `Location ${object.location}`
+  address.setAttribute('href', object.url)
+  followersP.textContent = `Followers ${object.followers}`
+  followingP.textContent = `Following ${object.following}`
+  bioP.textContent = `Bio ${object.bio}`
+  console.log()
+  return cardDiv
+}
+
